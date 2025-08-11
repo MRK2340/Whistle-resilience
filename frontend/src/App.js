@@ -19,7 +19,6 @@ import {
   BASKET_Y, 
   SHOT_DISTANCE_THRESHOLD 
 } from './utils/courtUtils';
-import { LEAD, TRAIL, CENTER } from './constants/roles';
 
 // Config
 const REF_SIZE = 14;
