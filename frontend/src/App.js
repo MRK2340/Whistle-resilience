@@ -40,25 +40,25 @@ export default function App() {
     config: { tension: 300, friction: 30 }
   }));
 
-  // Referee animations
-  const getLeadPosition = () => {
+  // Referee positions - memoized to prevent unnecessary re-renders
+  const getLeadPosition = useCallback(() => {
     const x = isShotMode ? COURT_WIDTH - ftToPx(10) : ballPosition.x + ftToPx(6);
     const y = isShotMode ? BASKET_Y + ftToPx(4) : Math.max(ftToPx(10), ballPosition.y - ftToPx(8));
     return { x: x - REF_SIZE / 2, y: y - REF_SIZE / 2 };
-  };
+  }, [ballPosition, isShotMode]);
 
-  const getTrailPosition = () => {
+  const getTrailPosition = useCallback(() => {
     const x = isShotMode ? COURT_WIDTH - ftToPx(16) : Math.min(ftToPx(30), ballPosition.x - ftToPx(10));
     const y = isShotMode ? BASKET_Y + ftToPx(12) : Math.max(ftToPx(60), ballPosition.y + ftToPx(12));
     return { x: x - REF_SIZE / 2, y: y - REF_SIZE / 2 };
-  };
+  }, [ballPosition, isShotMode]);
 
-  const getCenterPosition = () => {
+  const getCenterPosition = useCallback(() => {
     if (!isThreePerson) return { x: 0, y: 0, opacity: 0 };
     const x = isShotMode ? COURT_WIDTH - ftToPx(10) : COURT_WIDTH / 2;
     const y = isShotMode ? BASKET_Y : (ballPosition.y + Math.max(ftToPx(60), ballPosition.y + ftToPx(12))) / 2;
     return { x: x - REF_SIZE / 2, y: y - REF_SIZE / 2, opacity: 1 };
-  };
+  }, [ballPosition, isShotMode, isThreePerson]);
 
   const [leadStyle, setLeadStyle] = useSpring(() => {
     const pos = getLeadPosition();
