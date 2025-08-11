@@ -33,6 +33,15 @@ export default function App() {
   const [isShotMode, setIsShotMode] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isTransition, setIsTransition] = useState(false);
+  const [isManualMode, setIsManualMode] = useState(false); // New manual training mode
+  
+  // Manual positioning for training mode
+  const [manualLeadPosition, setManualLeadPosition] = useState({ x: 0, y: 0 });
+  const [manualTrailPosition, setManualTrailPosition] = useState({ x: 0, y: 0 });
+  const [manualCenterPosition, setManualCenterPosition] = useState({ x: 0, y: 0 });
+  
+  // Track what's being dragged
+  const [dragTarget, setDragTarget] = useState(null); // 'ball', 'lead', 'trail', 'center'
   
   // Track current referee roles - they can swap during transitions
   const [currentLeadRef, setCurrentLeadRef] = useState('LEAD'); // 'LEAD' or 'TRAIL'  
