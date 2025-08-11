@@ -208,7 +208,7 @@ export default function App() {
     
     setBallPosition({ x: clampedX, y: clampedY });
 
-    // Shot detection
+    // Shot detection near basket
     const dx = clampedX - BASKET_X;
     const dy = clampedY - BASKET_Y;
     const distance = Math.sqrt(dx * dx + dy * dy);
@@ -217,10 +217,16 @@ export default function App() {
       setTimeout(() => setIsShotMode(false), 1500);
     }
 
-    // Rotation on fast break
-    if (lastBallX.current < HALF_COURT_X && clampedX > HALF_COURT_X + 10) {
-      // Future: Trigger rotation logic here if desired
+    // Transition detection for proper Lead/Trail rotation
+    const isMovingToFrontcourt = lastBallX.current < HALF_COURT_X && clampedX > HALF_COURT_X + ftToPx(5);
+    const isMovingToBackcourt = lastBallX.current > HALF_COURT_X && clampedX < HALF_COURT_X - ftToPx(5);
+    
+    if (isMovingToFrontcourt || isMovingToBackcourt) {
+      setIsTransition(true);
+      // Reset transition state after rotation is complete
+      setTimeout(() => setIsTransition(false), 1000);
     }
+    
     lastBallX.current = clampedX;
   }, [isDragging, isShotMode]);
 
