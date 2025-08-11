@@ -223,18 +223,34 @@ export default function App() {
       setTimeout(() => setIsShotMode(false), 1500);
     }
 
-    // Transition detection for proper Lead/Trail rotation
+    // Lead/Trail rotation detection during transitions
     const isMovingToFrontcourt = lastBallX.current < HALF_COURT_X && clampedX > HALF_COURT_X + ftToPx(5);
     const isMovingToBackcourt = lastBallX.current > HALF_COURT_X && clampedX < HALF_COURT_X - ftToPx(5);
     
-    if (isMovingToFrontcourt || isMovingToBackcourt) {
-      setIsTransition(true);
-      // Reset transition state after rotation is complete
-      setTimeout(() => setIsTransition(false), 1000);
+    if (isMovingToFrontcourt) {
+      // Ball transitioning to frontcourt - Trail becomes Lead, Lead becomes Trail
+      if (lastTransitionDirection.current !== 'to-frontcourt') {
+        console.log('🏀 TRANSITION: Lead/Trail rotation - ball to frontcourt');
+        setCurrentLeadRef(currentTrailRef);   // Trail becomes new Lead
+        setCurrentTrailRef(currentLeadRef);   // Lead becomes new Trail  
+        lastTransitionDirection.current = 'to-frontcourt';
+        setIsTransition(true);
+        setTimeout(() => setIsTransition(false), 1000);
+      }
+    } else if (isMovingToBackcourt) {
+      // Ball transitioning to backcourt - reverse rotation
+      if (lastTransitionDirection.current !== 'to-backcourt') {
+        console.log('🏀 TRANSITION: Lead/Trail rotation - ball to backcourt');
+        setCurrentLeadRef(currentTrailRef);   // Trail becomes new Lead
+        setCurrentTrailRef(currentLeadRef);   // Lead becomes new Trail
+        lastTransitionDirection.current = 'to-backcourt';
+        setIsTransition(true);
+        setTimeout(() => setIsTransition(false), 1000);
+      }
     }
     
     lastBallX.current = clampedX;
-  }, [isDragging, isShotMode]);
+  }, [isDragging, isShotMode, currentLeadRef, currentTrailRef]);
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
