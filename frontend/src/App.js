@@ -48,8 +48,13 @@ export default function App() {
   }, [ballPosition, isShotMode]);
 
   const getTrailPosition = useCallback(() => {
-    const x = isShotMode ? COURT_WIDTH - ftToPx(16) : Math.min(ftToPx(30), ballPosition.x - ftToPx(10));
-    const y = isShotMode ? BASKET_Y + ftToPx(12) : Math.max(ftToPx(60), ballPosition.y + ftToPx(12));
+    // Ensure Trail is always visible and properly positioned
+    const x = isShotMode 
+      ? Math.max(10, COURT_WIDTH - ftToPx(16))  // Keep within bounds
+      : Math.max(10, Math.min(COURT_WIDTH * 0.3, ballPosition.x - ftToPx(8))); // Adjust positioning
+    const y = isShotMode 
+      ? Math.min(COURT_HEIGHT - 20, BASKET_Y + ftToPx(12))  // Keep within court bounds
+      : Math.min(COURT_HEIGHT - 20, Math.max(COURT_HEIGHT * 0.7, ballPosition.y + ftToPx(8))); // Better positioning
     return { x: x - REF_SIZE / 2, y: y - REF_SIZE / 2 };
   }, [ballPosition, isShotMode]);
 
