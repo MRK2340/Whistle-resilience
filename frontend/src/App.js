@@ -299,6 +299,7 @@ export default function App() {
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
+    setDragTarget(null);
   }, []);
 
   // Update ball spring animation
