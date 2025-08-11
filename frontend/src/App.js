@@ -200,8 +200,25 @@ export default function App() {
     });
   }, [ballPosition, isShotMode, isThreePerson, isTransition, currentLeadRef, currentTrailRef, getLeadPosition, getTrailPosition, getCenterPosition, setLeadStyle, setTrailStyle, setCenterStyle]);
 
-  const handleMouseDown = useCallback((e) => {
+  // Initialize manual positions when switching to manual mode
+  useEffect(() => {
+    if (isManualMode) {
+      // Set manual positions to current auto positions when switching to manual mode
+      const leadPos = getLeadPosition();
+      const trailPos = getTrailPosition();
+      const centerPos = getCenterPosition();
+      
+      setManualLeadPosition({ x: leadPos.x, y: leadPos.y });
+      setManualTrailPosition({ x: trailPos.x, y: trailPos.y });
+      setManualCenterPosition({ x: centerPos.x, y: centerPos.y });
+    }
+  }, [isManualMode, getLeadPosition, getTrailPosition, getCenterPosition]);
+
+  // Handle mouse down for both ball and referee dragging
+  const handleMouseDown = useCallback((e, target = 'ball') => {
     setIsDragging(true);
+    setDragTarget(target);
+    
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left - COURT_ORIGIN_X;
     const y = e.clientY - rect.top - COURT_ORIGIN_Y;
@@ -209,7 +226,10 @@ export default function App() {
     const clampedX = Math.max(0, Math.min(x, COURT_WIDTH));
     const clampedY = Math.max(0, Math.min(y, COURT_HEIGHT));
     
-    setBallPosition({ x: clampedX, y: clampedY });
+    if (target === 'ball') {
+      setBallPosition({ x: clampedX, y: clampedY });
+    }
+    // For referee pieces, initial position update happens in handleMouseMove
   }, []);
 
   const handleMouseMove = useCallback((e) => {
