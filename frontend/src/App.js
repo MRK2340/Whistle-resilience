@@ -292,9 +292,9 @@ export default function App() {
             <span className="ball-text">🏀</span>
           </animated.div>
 
-          {/* Lead Referee - shows current role symbol */}
+          {/* Lead Referee - shows current role symbol with transition effect */}
           <animated.div 
-            className="ref lead-ref" 
+            className={`ref lead-ref ${isTransition ? 'rotating' : ''}`}
             style={{
               ...leadStyle,
               width: REF_SIZE,
@@ -305,9 +305,9 @@ export default function App() {
             <span className="ref-text">{currentLeadRef === 'LEAD' ? 'L' : 'T'}</span>
           </animated.div>
 
-          {/* Trail Referee - shows current role symbol */}
+          {/* Trail Referee - shows current role symbol with transition effect */}
           <animated.div 
-            className="ref trail-ref" 
+            className={`ref trail-ref ${isTransition ? 'rotating' : ''}`}
             style={{
               ...trailStyle,
               width: REF_SIZE,
