@@ -334,10 +334,11 @@ export default function App() {
       <p className="app-subtitle">Drag ball to train positioning</p>
 
       <ToggleSystem isThreePerson={isThreePerson} onToggle={setIsThreePerson} />
+      <ModeToggle isManualMode={isManualMode} onToggle={setIsManualMode} />
 
       <div 
         className="court-wrapper"
-        onMouseDown={handleMouseDown}
+        onMouseDown={(e) => handleMouseDown(e, 'ball')}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
@@ -351,7 +352,7 @@ export default function App() {
               width: BALL_SIZE,
               height: BALL_SIZE,
               position: 'absolute',
-              cursor: isDragging ? 'grabbing' : 'grab'
+              cursor: isDragging && dragTarget === 'ball' ? 'grabbing' : 'grab'
             }}
           >
             <span className="ball-text">🏀</span>
@@ -359,40 +360,46 @@ export default function App() {
 
           {/* Lead Referee - shows current role symbol with transition effect */}
           <animated.div 
-            className={`ref lead-ref ${isTransition ? 'rotating' : ''}`}
+            className={`ref lead-ref ${isTransition ? 'rotating' : ''} ${isManualMode ? 'manual-mode' : ''}`}
             style={{
               ...leadStyle,
               width: REF_SIZE,
               height: REF_SIZE,
-              position: 'absolute'
+              position: 'absolute',
+              cursor: isManualMode ? (isDragging && dragTarget === 'lead' ? 'grabbing' : 'grab') : 'default'
             }}
+            onMouseDown={isManualMode ? (e) => { e.stopPropagation(); handleMouseDown(e, 'lead'); } : undefined}
           >
             <span className="ref-text">{currentLeadRef === 'LEAD' ? 'L' : 'T'}</span>
           </animated.div>
 
           {/* Trail Referee - shows current role symbol with transition effect */}
           <animated.div 
-            className={`ref trail-ref ${isTransition ? 'rotating' : ''}`}
+            className={`ref trail-ref ${isTransition ? 'rotating' : ''} ${isManualMode ? 'manual-mode' : ''}`}
             style={{
               ...trailStyle,
               width: REF_SIZE,
               height: REF_SIZE,
-              position: 'absolute'
+              position: 'absolute',
+              cursor: isManualMode ? (isDragging && dragTarget === 'trail' ? 'grabbing' : 'grab') : 'default'
             }}
+            onMouseDown={isManualMode ? (e) => { e.stopPropagation(); handleMouseDown(e, 'trail'); } : undefined}
           >
             <span className="ref-text">{currentTrailRef === 'TRAIL' ? 'T' : 'L'}</span>
           </animated.div>
 
-          {/* Center */}
+          {/* Center Referee */}
           {isThreePerson && (
             <animated.div 
-              className="ref center-ref" 
+              className={`ref center-ref ${isTransition ? 'rotating' : ''} ${isManualMode ? 'manual-mode' : ''}`}
               style={{
                 ...centerStyle,
                 width: REF_SIZE,
                 height: REF_SIZE,
-                position: 'absolute'
+                position: 'absolute',
+                cursor: isManualMode ? (isDragging && dragTarget === 'center' ? 'grabbing' : 'grab') : 'default'
               }}
+              onMouseDown={isManualMode ? (e) => { e.stopPropagation(); handleMouseDown(e, 'center'); } : undefined}
             >
               <span className="ref-text">C</span>
             </animated.div>
