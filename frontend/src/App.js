@@ -5,6 +5,7 @@ import './App.css';
 // Components
 import Court from './components/Court';
 import ToggleSystem from './components/ToggleSystem';
+import ModeToggle from './components/ModeToggle';
 import ShotOverlay from './components/ShotOverlay';
 
 // Utils & Constants
