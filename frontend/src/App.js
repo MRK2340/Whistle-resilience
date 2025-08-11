@@ -429,7 +429,8 @@ export default function App() {
       </div>
 
       <p className="mode-text">
-        Mode: <span className="bold">{isThreePerson ? '3-Person' : '2-Person'}</span>
+        System: <span className="bold">{isThreePerson ? '3-Person' : '2-Person'}</span> | 
+        Mode: <span className="bold">{isManualMode ? 'Manual Training' : 'Auto Positioning'}</span>
       </p>
     </div>
   );
