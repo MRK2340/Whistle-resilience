@@ -33,7 +33,13 @@ export default function App() {
   const [isShotMode, setIsShotMode] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isTransition, setIsTransition] = useState(false);
+  
+  // Track current referee roles - they can swap during transitions
+  const [currentLeadRef, setCurrentLeadRef] = useState('LEAD'); // 'LEAD' or 'TRAIL'  
+  const [currentTrailRef, setCurrentTrailRef] = useState('TRAIL'); // 'TRAIL' or 'LEAD'
+  
   const lastBallX = useRef(ballPosition.x);
+  const lastTransitionDirection = useRef(null); // 'to-frontcourt' or 'to-backcourt'
 
   // Ball animation
   const [ballStyle, setBallStyle] = useSpring(() => ({
