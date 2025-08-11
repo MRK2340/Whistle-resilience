@@ -252,7 +252,7 @@ export default function App() {
     }
     
     lastBallX.current = clampedX;
-  }, [isDragging, isShotMode, currentLeadRef, currentTrailRef]);
+  }, [isDragging, isShotMode]); // Removed currentLeadRef, currentTrailRef dependencies
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
