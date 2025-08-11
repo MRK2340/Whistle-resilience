@@ -182,7 +182,7 @@ export default function App() {
       transform: `translate(${centerPos.x}px, ${centerPos.y}px)`,
       opacity: centerPos.opacity
     });
-  }, [ballPosition, isShotMode, isThreePerson, getLeadPosition, getTrailPosition, getCenterPosition, setLeadStyle, setTrailStyle, setCenterStyle]);
+  }, [ballPosition, isShotMode, isThreePerson, isTransition, getLeadPosition, getTrailPosition, getCenterPosition, setLeadStyle, setTrailStyle, setCenterStyle]);
 
   const handleMouseDown = useCallback((e) => {
     setIsDragging(true);
