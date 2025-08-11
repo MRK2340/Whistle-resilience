@@ -1,0 +1,29 @@
+.court-container {
+  margin: 15px 0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #0a5c0a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.court {
+  background-color: #0a5c0a;
+  position: relative;
+}
+
+.half-court-line {
+  position: absolute;
+  background-color: #fff;
+}
+
+.key-top {
+  position: absolute;
+  background-color: #fff;
+}
+
+.three-point-line {
+  position: absolute;
+  border: 2px solid #fff;
+  background: transparent;
+}
