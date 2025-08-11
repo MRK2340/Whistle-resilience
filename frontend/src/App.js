@@ -231,8 +231,9 @@ export default function App() {
       // Ball transitioning to frontcourt - Trail becomes Lead, Lead becomes Trail
       if (lastTransitionDirection.current !== 'to-frontcourt') {
         console.log('🏀 TRANSITION: Lead/Trail rotation - ball to frontcourt');
-        setCurrentLeadRef(currentTrailRef);   // Trail becomes new Lead
-        setCurrentTrailRef(currentLeadRef);   // Lead becomes new Trail  
+        // Use functional updates to avoid stale closure issues
+        setCurrentLeadRef(prev => prev === 'LEAD' ? 'TRAIL' : 'LEAD');
+        setCurrentTrailRef(prev => prev === 'TRAIL' ? 'LEAD' : 'TRAIL');
         lastTransitionDirection.current = 'to-frontcourt';
         setIsTransition(true);
         setTimeout(() => setIsTransition(false), 1000);
@@ -241,8 +242,9 @@ export default function App() {
       // Ball transitioning to backcourt - reverse rotation
       if (lastTransitionDirection.current !== 'to-backcourt') {
         console.log('🏀 TRANSITION: Lead/Trail rotation - ball to backcourt');
-        setCurrentLeadRef(currentTrailRef);   // Trail becomes new Lead
-        setCurrentTrailRef(currentLeadRef);   // Lead becomes new Trail
+        // Use functional updates to avoid stale closure issues
+        setCurrentLeadRef(prev => prev === 'LEAD' ? 'TRAIL' : 'LEAD');
+        setCurrentTrailRef(prev => prev === 'TRAIL' ? 'LEAD' : 'TRAIL');
         lastTransitionDirection.current = 'to-backcourt';
         setIsTransition(true);
         setTimeout(() => setIsTransition(false), 1000);
