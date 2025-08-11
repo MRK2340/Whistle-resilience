@@ -292,7 +292,7 @@ export default function App() {
             <span className="ball-text">🏀</span>
           </animated.div>
 
-          {/* Lead */}
+          {/* Lead Referee - shows current role symbol */}
           <animated.div 
             className="ref lead-ref" 
             style={{
@@ -302,10 +302,10 @@ export default function App() {
               position: 'absolute'
             }}
           >
-            <span className="ref-text">L</span>
+            <span className="ref-text">{currentLeadRef === 'LEAD' ? 'L' : 'T'}</span>
           </animated.div>
 
-          {/* Trail */}
+          {/* Trail Referee - shows current role symbol */}
           <animated.div 
             className="ref trail-ref" 
             style={{
@@ -315,7 +315,7 @@ export default function App() {
               position: 'absolute'
             }}
           >
-            <span className="ref-text">T</span>
+            <span className="ref-text">{currentTrailRef === 'TRAIL' ? 'T' : 'L'}</span>
           </animated.div>
 
           {/* Center */}
