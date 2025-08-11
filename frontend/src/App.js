@@ -182,23 +182,42 @@ export default function App() {
     };
   });
 
-  // Update referee positions when ball moves or mode changes
+  // Update referee spring animations based on mode
   useEffect(() => {
-    const leadPos = getLeadPosition();
-    const trailPos = getTrailPosition();
-    const centerPos = getCenterPosition();
+    if (isManualMode) {
+      // In manual mode, use manual positions
+      setLeadStyle.start({
+        transform: `translate(${manualLeadPosition.x}px, ${manualLeadPosition.y}px)`
+      });
+      setTrailStyle.start({
+        transform: `translate(${manualTrailPosition.x}px, ${manualTrailPosition.y}px)`
+      });
+      setCenterStyle.start({
+        transform: `translate(${manualCenterPosition.x}px, ${manualCenterPosition.y}px)`,
+        opacity: isThreePerson ? 1 : 0
+      });
+    } else {
+      // In auto mode, use calculated positions
+      const leadPos = getLeadPosition();
+      const trailPos = getTrailPosition();
+      const centerPos = getCenterPosition();
 
-    setLeadStyle.start({
-      transform: `translate(${leadPos.x}px, ${leadPos.y}px)`
-    });
-    setTrailStyle.start({
-      transform: `translate(${trailPos.x}px, ${trailPos.y}px)`
-    });
-    setCenterStyle.start({
-      transform: `translate(${centerPos.x}px, ${centerPos.y}px)`,
-      opacity: centerPos.opacity
-    });
-  }, [ballPosition, isShotMode, isThreePerson, isTransition, currentLeadRef, currentTrailRef, getLeadPosition, getTrailPosition, getCenterPosition, setLeadStyle, setTrailStyle, setCenterStyle]);
+      setLeadStyle.start({
+        transform: `translate(${leadPos.x}px, ${leadPos.y}px)`
+      });
+      setTrailStyle.start({
+        transform: `translate(${trailPos.x}px, ${trailPos.y}px)`
+      });
+      setCenterStyle.start({
+        transform: `translate(${centerPos.x}px, ${centerPos.y}px)`,
+        opacity: centerPos.opacity
+      });
+    }
+  }, [
+    ballPosition, isShotMode, isThreePerson, isTransition, currentLeadRef, currentTrailRef,
+    isManualMode, manualLeadPosition, manualTrailPosition, manualCenterPosition,
+    getLeadPosition, getTrailPosition, getCenterPosition, setLeadStyle, setTrailStyle, setCenterStyle
+  ]);
 
   // Initialize manual positions when switching to manual mode
   useEffect(() => {
