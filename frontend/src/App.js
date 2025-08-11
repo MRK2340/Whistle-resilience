@@ -32,6 +32,7 @@ export default function App() {
   const [isThreePerson, setIsThreePerson] = useState(true);
   const [isShotMode, setIsShotMode] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isTransition, setIsTransition] = useState(false);
   const lastBallX = useRef(ballPosition.x);
 
   // Ball animation
