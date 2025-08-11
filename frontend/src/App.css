@@ -122,6 +122,27 @@
   font-weight: bold;
 }
 
+.manual-mode {
+  border: 2px dashed #FF6B35 !important;
+  animation: manualGlow 2s ease-in-out infinite alternate;
+}
+
+.manual-mode:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.6);
+}
+
+@keyframes manualGlow {
+  0% { 
+    border-color: #FF6B35;
+    box-shadow: 0 0 5px rgba(255, 107, 53, 0.3);
+  }
+  100% { 
+    border-color: #FF8C00;
+    box-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+  }
+}
+
 .rotating {
   animation: rotationPulse 1s ease-in-out;
   transform-origin: center;
