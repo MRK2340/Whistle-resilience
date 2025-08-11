@@ -1,7 +1,14 @@
 // courtUtils.js - Web version
-export const COURT_WIDTH = Math.min(window.innerWidth * 0.9, 600);
+const getWindowWidth = () => {
+  if (typeof window !== 'undefined') {
+    return window.innerWidth;
+  }
+  return 800; // Default for server-side rendering
+};
+
+export const COURT_WIDTH = Math.min(getWindowWidth() * 0.8, 600);
 export const COURT_HEIGHT = (COURT_WIDTH * 50) / 94; // 50x94 ft basketball court ratio
-export const COURT_ORIGIN_X = (window.innerWidth - COURT_WIDTH) / 2;
+export const COURT_ORIGIN_X = (getWindowWidth() - COURT_WIDTH) / 2;
 export const COURT_ORIGIN_Y = 80;
 
 // Convert feet to pixels
