@@ -122,6 +122,58 @@
   font-weight: bold;
 }
 
+.coverage-toggle-container {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.coverage-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #fff;
+  padding: 8px 15px;
+  border-radius: 15px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.coverage-toggle:hover {
+  background-color: #f8f9fa;
+  border-color: #007bff;
+}
+
+.coverage-toggle input[type="checkbox"] {
+  transform: scale(1.2);
+  accent-color: #007bff;
+}
+
+.coverage-toggle-text {
+  font-size: 13px;
+  color: #333;
+  font-weight: 600;
+  user-select: none;
+}
+
+.game-state-info {
+  font-size: 11px;
+  color: #666;
+  font-weight: normal;
+}
+
+.special-play {
+  color: #ff6b35;
+  font-weight: bold;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
 .manual-mode {
   border: 2px dashed #FF6B35 !important;
   animation: manualGlow 2s ease-in-out infinite alternate;
