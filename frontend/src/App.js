@@ -51,10 +51,19 @@ export default function App() {
     lastRotationTime: 0
   });
   
-  // Manual positioning for training mode
-  const [manualLeadPosition, setManualLeadPosition] = useState({ x: 0, y: 0 });
-  const [manualTrailPosition, setManualTrailPosition] = useState({ x: 0, y: 0 });
-  const [manualCenterPosition, setManualCenterPosition] = useState({ x: 0, y: 0 });
+  // Manual positioning for training mode - initialize with reasonable defaults
+  const [manualLeadPosition, setManualLeadPosition] = useState({ 
+    x: COURT_WIDTH * 0.8, 
+    y: COURT_HEIGHT * 0.4 
+  });
+  const [manualTrailPosition, setManualTrailPosition] = useState({ 
+    x: COURT_WIDTH * 0.6, 
+    y: COURT_HEIGHT * 0.6 
+  });
+  const [manualCenterPosition, setManualCenterPosition] = useState({ 
+    x: COURT_WIDTH * 0.5, 
+    y: COURT_HEIGHT * 0.3 
+  });
   
   // Track what's being dragged
   const [dragTarget, setDragTarget] = useState(null);
