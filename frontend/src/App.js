@@ -72,105 +72,43 @@ export default function App() {
     config: { tension: 300, friction: 30 }
   }));
 
-  // Proper basketball referee positioning mechanics
+  // Enhanced game state tracking based on ball position
+  useEffect(() => {
+    const ballSide = getBallSide(ballPosition.x);
+    const newGameState = {
+      ballZone: isInZone(ballPosition.x, ballPosition.y, 'PAINT') ? 'PAINT' : 
+                isInZone(ballPosition.x, ballPosition.y, 'PERIMETER') ? 'PERIMETER' :
+                isInZone(ballPosition.x, ballPosition.y, 'BACKCOURT') ? 'BACKCOURT' : 'PERIMETER',
+      ballSide: ballSide,
+      isPostPlay: isInZone(ballPosition.x, ballPosition.y, 'PAINT'),
+      isCornerPlay: isInZone(ballPosition.x, ballPosition.y, 'CORNER_LEFT') || 
+                    isInZone(ballPosition.x, ballPosition.y, 'CORNER_RIGHT'),
+      isTransitionPlay: isInZone(ballPosition.x, ballPosition.y, 'BACKCOURT'),
+      isShotMode: isShotMode,
+      lastRotationTime: gameState.lastRotationTime
+    };
+    setGameState(newGameState);
+  }, [ballPosition, isShotMode, gameState.lastRotationTime]);
+
+  // Enhanced referee positioning using authentic basketball mechanics
   const getLeadPosition = useCallback(() => {
-    // Lead referee should be on the baseline, typically opposite side of ball
-    // Primary responsibility: paint area, baseline, close-down plays
-    
-    if (isShotMode) {
-      // During shots: Lead moves to basket area for rebound coverage
-      return { 
-        x: COURT_WIDTH - ftToPx(8) - REF_SIZE / 2, 
-        y: BASKET_Y - ftToPx(6) - REF_SIZE / 2 
-      };
-    }
-    
-    // Normal play: Lead on baseline, opposite side of ball when possible
-    const ballSide = ballPosition.x > COURT_WIDTH / 2 ? 'right' : 'left';
-    const leadX = ballSide === 'right' 
-      ? COURT_WIDTH - ftToPx(5)  // Right baseline
-      : COURT_WIDTH - ftToPx(25); // Left baseline (opposite side)
-    
-    // Lead stays near baseline but adjusts slightly with ball movement
-    const leadY = Math.max(ftToPx(5), 
-                  Math.min(COURT_HEIGHT - ftToPx(5), 
-                          ballPosition.y + ftToPx(2)));
-    
-    return { x: leadX - REF_SIZE / 2, y: leadY - REF_SIZE / 2 };
-  }, [ballPosition, isShotMode]);
+    if (isManualMode) return manualLeadPosition;
+    const optimalPos = getOptimalPosition('LEAD', ballPosition.x, ballPosition.y, gameState);
+    return { x: optimalPos.x - REF_SIZE / 2, y: optimalPos.y - REF_SIZE / 2 };
+  }, [ballPosition, gameState, isManualMode, manualLeadPosition]);
 
   const getTrailPosition = useCallback(() => {
-    // Trail referee should be behind the play, managing perimeter and transitions
-    // Primary responsibility: perimeter action, three-point line, transitions
-    
-    if (isShotMode) {
-      // During shots: Trail provides different angle coverage
-      return { 
-        x: COURT_WIDTH - ftToPx(20) - REF_SIZE / 2, 
-        y: BASKET_Y + ftToPx(8) - REF_SIZE / 2 
-      };
-    }
-    
-    // Trail positioning based on ball location and court coverage
-    let trailX, trailY;
-    
-    if (ballPosition.x < HALF_COURT_X) {
-      // Ball in backcourt: Trail manages from behind
-      trailX = Math.max(ftToPx(8), ballPosition.x - ftToPx(15));
-      trailY = Math.max(ftToPx(8), 
-                      Math.min(COURT_HEIGHT - ftToPx(8), 
-                              ballPosition.y - ftToPx(5)));
-    } else {
-      // Ball in frontcourt: Trail at top of key/perimeter
-      trailX = COURT_WIDTH - ftToPx(35); // Top of key area
-      trailY = Math.max(COURT_HEIGHT * 0.2,
-                       Math.min(COURT_HEIGHT * 0.8, 
-                               ballPosition.y - ftToPx(10)));
-    }
-    
-    return { x: trailX - REF_SIZE / 2, y: trailY - REF_SIZE / 2 };
-  }, [ballPosition, isShotMode]);
+    if (isManualMode) return manualTrailPosition;
+    const optimalPos = getOptimalPosition('TRAIL', ballPosition.x, ballPosition.y, gameState);
+    return { x: optimalPos.x - REF_SIZE / 2, y: optimalPos.y - REF_SIZE / 2 };
+  }, [ballPosition, gameState, isManualMode, manualTrailPosition]);
 
   const getCenterPosition = useCallback(() => {
     if (!isThreePerson) return { x: 0, y: 0, opacity: 0 };
-    
-    // Center referee provides help-side coverage and off-ball officiating
-    // Primary responsibility: help-side, off-ball action, weak-side coverage
-    
-    if (isShotMode) {
-      // During shots: Center provides help-side rebound coverage
-      return { 
-        x: COURT_WIDTH - ftToPx(15) - REF_SIZE / 2, 
-        y: BASKET_Y - REF_SIZE / 2,
-        opacity: 1
-      };
-    }
-    
-    // Center positioning for optimal court coverage
-    let centerX, centerY;
-    
-    if (ballPosition.x < HALF_COURT_X) {
-      // Ball in backcourt: Center near mid-court for transition coverage
-      centerX = HALF_COURT_X - ftToPx(8);
-      centerY = COURT_HEIGHT / 2;
-    } else {
-      // Ball in frontcourt: Center on help-side (opposite ball)
-      const ballSide = ballPosition.x > (COURT_WIDTH - ftToPx(20)) ? 'deep' : 'perimeter';
-      centerX = ballSide === 'deep' 
-        ? COURT_WIDTH - ftToPx(30)  // Help-side when ball is deep
-        : COURT_WIDTH - ftToPx(20); // Closer when ball on perimeter
-      
-      centerY = ballPosition.y < COURT_HEIGHT / 2
-        ? COURT_HEIGHT * 0.7  // Opposite vertical position for coverage
-        : COURT_HEIGHT * 0.3;
-    }
-    
-    return { 
-      x: centerX - REF_SIZE / 2, 
-      y: centerY - REF_SIZE / 2, 
-      opacity: 1 
-    };
-  }, [ballPosition, isShotMode, isThreePerson]);
+    if (isManualMode) return { ...manualCenterPosition, opacity: 1 };
+    const optimalPos = getOptimalPosition('CENTER', ballPosition.x, ballPosition.y, gameState);
+    return { x: optimalPos.x - REF_SIZE / 2, y: optimalPos.y - REF_SIZE / 2, opacity: 1 };
+  }, [ballPosition, gameState, isThreePerson, isManualMode, manualCenterPosition]);
 
   const [leadStyle, setLeadStyle] = useSpring(() => {
     const pos = getLeadPosition();
