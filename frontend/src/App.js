@@ -414,6 +414,18 @@ export default function App() {
       <p className="mode-text">
         System: <span className="bold">{isThreePerson ? '3-Person' : '2-Person'}</span> | 
         Mode: <span className="bold">{isManualMode ? 'Manual Training' : 'Auto Positioning'}</span>
+        {gameState && !isManualMode && (
+          <>
+            <br />
+            <span className="game-state-info">
+              Zone: <span className="bold">{gameState.ballZone}</span> | 
+              Side: <span className="bold">{gameState.ballSide}</span>
+              {gameState.isPostPlay && <span className="special-play"> | 📍 POST PLAY</span>}
+              {gameState.isCornerPlay && <span className="special-play"> | 📐 CORNER</span>}
+              {gameState.isTransitionPlay && <span className="special-play"> | ⚡ TRANSITION</span>}
+            </span>
+          </>
+        )}
       </p>
     </div>
   );
