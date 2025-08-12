@@ -118,26 +118,61 @@ export const getBallSide = (ballX) => {
   }
 };
 
-// Determine if ball is in specific zones
+// Determine if ball is in specific zones - Full Court
 export const isInZone = (ballX, ballY, zone) => {
   switch (zone) {
-    case 'PAINT':
-      return ballX >= COURT_ZONES.PAINT.x && 
-             ballX <= COURT_ZONES.PAINT.x + COURT_ZONES.PAINT.width &&
-             ballY >= COURT_ZONES.PAINT.y && 
-             ballY <= COURT_ZONES.PAINT.y + COURT_ZONES.PAINT.height;
+    case 'RIGHT_PAINT':
+      return ballX >= COURT_ZONES.RIGHT_PAINT.x && 
+             ballX <= COURT_ZONES.RIGHT_PAINT.x + COURT_ZONES.RIGHT_PAINT.width &&
+             ballY >= COURT_ZONES.RIGHT_PAINT.y && 
+             ballY <= COURT_ZONES.RIGHT_PAINT.y + COURT_ZONES.RIGHT_PAINT.height;
              
-    case 'PERIMETER':
-      return ballX < COURT_ZONES.PAINT.x && ballX > HALF_COURT_X;
+    case 'LEFT_PAINT':
+      return ballX >= COURT_ZONES.LEFT_PAINT.x && 
+             ballX <= COURT_ZONES.LEFT_PAINT.x + COURT_ZONES.LEFT_PAINT.width &&
+             ballY >= COURT_ZONES.LEFT_PAINT.y && 
+             ballY <= COURT_ZONES.LEFT_PAINT.y + COURT_ZONES.LEFT_PAINT.height;
+             
+    case 'PAINT': // Legacy support - checks both paints
+      return isInZone(ballX, ballY, 'RIGHT_PAINT') || isInZone(ballX, ballY, 'LEFT_PAINT');
       
-    case 'CORNER_LEFT':
+    case 'RIGHT_PERIMETER':
+      return ballX < COURT_ZONES.RIGHT_PAINT.x && ballX > HALF_COURT_X;
+      
+    case 'LEFT_PERIMETER':
+      return ballX > COURT_ZONES.LEFT_PAINT.width && ballX < HALF_COURT_X;
+      
+    case 'PERIMETER': // Legacy support - checks if in any perimeter area
+      return isInZone(ballX, ballY, 'RIGHT_PERIMETER') || isInZone(ballX, ballY, 'LEFT_PERIMETER');
+      
+    case 'RIGHT_CORNER_TOP':
       return ballY < COURT_HEIGHT * 0.3 && ballX > COURT_WIDTH - ftToPx(25);
       
-    case 'CORNER_RIGHT': 
+    case 'RIGHT_CORNER_BOTTOM': 
       return ballY > COURT_HEIGHT * 0.7 && ballX > COURT_WIDTH - ftToPx(25);
+      
+    case 'LEFT_CORNER_TOP':
+      return ballY < COURT_HEIGHT * 0.3 && ballX < ftToPx(25);
+      
+    case 'LEFT_CORNER_BOTTOM': 
+      return ballY > COURT_HEIGHT * 0.7 && ballX < ftToPx(25);
+      
+    case 'CORNER_LEFT': // Legacy support
+      return isInZone(ballX, ballY, 'RIGHT_CORNER_TOP');
+      
+    case 'CORNER_RIGHT': // Legacy support
+      return isInZone(ballX, ballY, 'RIGHT_CORNER_BOTTOM');
       
     case 'BACKCOURT':
       return ballX < HALF_COURT_X;
+      
+    case 'FRONTCOURT':
+      return ballX > HALF_COURT_X;
+      
+    case 'CENTER_CIRCLE':
+      const dx = ballX - COURT_ZONES.CENTER_CIRCLE.center.x;
+      const dy = ballY - COURT_ZONES.CENTER_CIRCLE.center.y;
+      return Math.sqrt(dx * dx + dy * dy) <= COURT_ZONES.CENTER_CIRCLE.radius;
       
     default:
       return false;
