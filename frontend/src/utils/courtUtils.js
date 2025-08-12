@@ -14,10 +14,19 @@ export const COURT_ORIGIN_Y = 80;
 // Convert feet to pixels
 export const ftToPx = (ft) => (ft / 94) * COURT_WIDTH;
 
-// Court zones and key landmarks
+// Court zones and key landmarks - Full Court
 export const HALF_COURT_X = COURT_WIDTH / 2;
-export const BASKET_X = COURT_WIDTH;
-export const BASKET_Y = COURT_HEIGHT / 2;
+
+// Both baskets
+export const LEFT_BASKET_X = ftToPx(4); // Defensive basket
+export const LEFT_BASKET_Y = COURT_HEIGHT / 2;
+export const RIGHT_BASKET_X = COURT_WIDTH - ftToPx(4); // Offensive basket  
+export const RIGHT_BASKET_Y = COURT_HEIGHT / 2;
+
+// Legacy support - Right basket is the main "BASKET" for offensive plays
+export const BASKET_X = RIGHT_BASKET_X;
+export const BASKET_Y = RIGHT_BASKET_Y;
+
 export const SHOT_DISTANCE_THRESHOLD = ftToPx(20); // Within 20ft
 
 // Key court zones for referee positioning
