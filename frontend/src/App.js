@@ -38,7 +38,18 @@ export default function App() {
   const [isShotMode, setIsShotMode] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isTransition, setIsTransition] = useState(false);
-  const [isManualMode, setIsManualMode] = useState(false); // New manual training mode
+  const [isManualMode, setIsManualMode] = useState(false);
+  const [showCoverage, setShowCoverage] = useState(false); // New: Show coverage zones
+  
+  // Enhanced game state tracking
+  const [gameState, setGameState] = useState({
+    ballZone: 'PERIMETER',
+    ballSide: 'BALL_SIDE',
+    isPostPlay: false,
+    isCornerPlay: false,
+    isTransitionPlay: false,
+    lastRotationTime: 0
+  });
   
   // Manual positioning for training mode
   const [manualLeadPosition, setManualLeadPosition] = useState({ x: 0, y: 0 });
@@ -46,14 +57,14 @@ export default function App() {
   const [manualCenterPosition, setManualCenterPosition] = useState({ x: 0, y: 0 });
   
   // Track what's being dragged
-  const [dragTarget, setDragTarget] = useState(null); // 'ball', 'lead', 'trail', 'center'
+  const [dragTarget, setDragTarget] = useState(null);
   
   // Track current referee roles - they can swap during transitions
-  const [currentLeadRef, setCurrentLeadRef] = useState('LEAD'); // 'LEAD' or 'TRAIL'  
-  const [currentTrailRef, setCurrentTrailRef] = useState('TRAIL'); // 'TRAIL' or 'LEAD'
+  const [currentLeadRef, setCurrentLeadRef] = useState('LEAD');
+  const [currentTrailRef, setCurrentTrailRef] = useState('TRAIL');
   
   const lastBallX = useRef(ballPosition.x);
-  const lastTransitionDirection = useRef(null); // 'to-frontcourt' or 'to-backcourt'
+  const lastTransitionDirection = useRef(null);
 
   // Ball animation
   const [ballStyle, setBallStyle] = useSpring(() => ({
