@@ -29,52 +29,60 @@ export const BASKET_Y = RIGHT_BASKET_Y;
 
 export const SHOT_DISTANCE_THRESHOLD = ftToPx(20); // Within 20ft
 
-// Key court zones for referee positioning
+// Key court zones for referee positioning - Full Court
 export const COURT_ZONES = {
-  // Frontcourt zones (attacking end)
-  PAINT: {
-    x: COURT_WIDTH - ftToPx(19), // 19ft lane width
-    y: ftToPx(14), // 14ft from baseline to free throw line
-    width: ftToPx(12), // 12ft lane width
-    height: ftToPx(15) // 15ft lane length
-  },
-  
-  FREE_THROW_LINE_EXTENDED: {
+  // Right side zones (Offensive/Attacking end)
+  RIGHT_PAINT: {
     x: COURT_WIDTH - ftToPx(19),
-    y: ftToPx(14),
-    extend: true // Extends across court
+    y: COURT_HEIGHT / 2 - ftToPx(8),
+    width: ftToPx(19),
+    height: ftToPx(16)
   },
   
-  THREE_POINT_ARC: {
-    center: { x: BASKET_X, y: BASKET_Y },
-    radius: ftToPx(23.75) // 23'9" three-point line
+  RIGHT_FREE_THROW_CIRCLE: {
+    center: { x: COURT_WIDTH - ftToPx(19), y: COURT_HEIGHT / 2 },
+    radius: ftToPx(6)
   },
   
-  CORNERS: {
-    LEFT_CORNER: {
-      x: COURT_WIDTH - ftToPx(22), // 22ft from baseline
-      y: 0,
-      width: ftToPx(22),
-      height: ftToPx(14)
-    },
-    RIGHT_CORNER: {
-      x: COURT_WIDTH - ftToPx(22),
-      y: COURT_HEIGHT - ftToPx(14),
-      width: ftToPx(22),
-      height: ftToPx(14)
-    }
+  RIGHT_THREE_POINT_ARC: {
+    center: { x: RIGHT_BASKET_X, y: RIGHT_BASKET_Y },
+    radius: ftToPx(23.75)
   },
   
-  PERIMETER: {
-    x: COURT_WIDTH - ftToPx(35), // Beyond three-point line
-    y: 0,
-    width: ftToPx(35),
-    height: COURT_HEIGHT
+  // Left side zones (Defensive end)
+  LEFT_PAINT: {
+    x: 0,
+    y: COURT_HEIGHT / 2 - ftToPx(8),
+    width: ftToPx(19),
+    height: ftToPx(16)
   },
   
-  // Court sides
-  BALL_SIDE: 'dynamic', // Determined by ball position
-  HELP_SIDE: 'dynamic'  // Opposite of ball side
+  LEFT_FREE_THROW_CIRCLE: {
+    center: { x: ftToPx(19), y: COURT_HEIGHT / 2 },
+    radius: ftToPx(6)
+  },
+  
+  LEFT_THREE_POINT_ARC: {
+    center: { x: LEFT_BASKET_X, y: LEFT_BASKET_Y },
+    radius: ftToPx(23.75)
+  },
+  
+  // Corner areas - both ends
+  RIGHT_CORNERS: {
+    TOP: { x: COURT_WIDTH - ftToPx(22), y: 0, width: ftToPx(22), height: ftToPx(14) },
+    BOTTOM: { x: COURT_WIDTH - ftToPx(22), y: COURT_HEIGHT - ftToPx(14), width: ftToPx(22), height: ftToPx(14) }
+  },
+  
+  LEFT_CORNERS: {
+    TOP: { x: 0, y: 0, width: ftToPx(22), height: ftToPx(14) },
+    BOTTOM: { x: 0, y: COURT_HEIGHT - ftToPx(14), width: ftToPx(22), height: ftToPx(14) }
+  },
+  
+  // Center court
+  CENTER_CIRCLE: {
+    center: { x: HALF_COURT_X, y: COURT_HEIGHT / 2 },
+    radius: ftToPx(6)
+  }
 };
 
 // Coverage responsibilities for three-person crew
