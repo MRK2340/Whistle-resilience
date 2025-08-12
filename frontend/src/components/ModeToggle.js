@@ -5,23 +5,16 @@ import './ModeToggle.css';
 export default function ModeToggle({ isManualMode, onToggle }) {
   return (
     <div className="mode-toggle-container">
-      <div 
-        style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}
-        onClick={() => {
-          console.log('🎯 MODE TOGGLE CLICKED:', !isManualMode);
-          onToggle(!isManualMode);
-        }}
-      >
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <span className="mode-label">Auto Mode</span>
-        <label className="mode-switch">
+        <label className="mode-switch" style={{ cursor: 'pointer' }}>
           <input
             type="checkbox"
             checked={isManualMode}
             onChange={(e) => {
-              console.log('🎯 INPUT CHANGE:', e.target.checked);
+              console.log('🎯 MANUAL MODE TOGGLE:', e.target.checked);
               onToggle(e.target.checked);
             }}
-            onClick={(e) => e.stopPropagation()} // Prevent double firing
           />
           <span className="mode-slider"></span>
         </label>
