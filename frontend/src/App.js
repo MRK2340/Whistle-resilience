@@ -324,7 +324,13 @@ export default function App() {
       <p className="app-subtitle">Drag ball to train positioning</p>
 
       <ToggleSystem isThreePerson={isThreePerson} onToggle={setIsThreePerson} />
-      <ModeToggle isManualMode={isManualMode} onToggle={setIsManualMode} />
+      <ModeToggle 
+        isManualMode={isManualMode} 
+        onToggle={(value) => {
+          console.log('🎯 MANUAL MODE TOGGLE:', value);
+          setIsManualMode(value);
+        }} 
+      />
       
       {/* Coverage Zones Toggle */}
       <div className="coverage-toggle-container">
