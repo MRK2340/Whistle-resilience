@@ -187,15 +187,17 @@ export default function App() {
   useEffect(() => {
     if (isManualMode) {
       // Set manual positions to current auto positions when switching to manual mode
-      const leadPos = getLeadPosition();
-      const trailPos = getTrailPosition();
-      const centerPos = getCenterPosition();
+      const leadPos = getAutoLeadPosition();
+      const trailPos = getAutoTrailPosition();
+      const centerPos = getAutoCenterPosition();
+      
+      console.log('🎯 MANUAL MODE: Initializing positions', { leadPos, trailPos, centerPos });
       
       setManualLeadPosition({ x: leadPos.x, y: leadPos.y });
       setManualTrailPosition({ x: trailPos.x, y: trailPos.y });
       setManualCenterPosition({ x: centerPos.x, y: centerPos.y });
     }
-  }, [isManualMode, getLeadPosition, getTrailPosition, getCenterPosition]);
+  }, [isManualMode, getAutoLeadPosition, getAutoTrailPosition, getAutoCenterPosition]);
 
   // Handle mouse down for both ball and referee dragging
   const handleMouseDown = useCallback((e, target = 'ball') => {
