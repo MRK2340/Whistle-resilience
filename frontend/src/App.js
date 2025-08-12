@@ -238,15 +238,15 @@ export default function App() {
     
     console.log('🎯 MOUSE MOVE:', dragTarget, 'isManualMode:', isManualMode);
     
-    // Get coordinates relative to the court wrapper
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left - COURT_ORIGIN_X;
-    const y = e.clientY - rect.top - COURT_ORIGIN_Y;
-    
-    const clampedX = Math.max(0, Math.min(x, COURT_WIDTH));
-    const clampedY = Math.max(0, Math.min(y, COURT_HEIGHT));
-    
     if (dragTarget === 'ball') {
+      // For ball dragging, use court-relative coordinates
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = e.clientX - rect.left - COURT_ORIGIN_X;
+      const y = e.clientY - rect.top - COURT_ORIGIN_Y;
+      
+      const clampedX = Math.max(0, Math.min(x, COURT_WIDTH));
+      const clampedY = Math.max(0, Math.min(y, COURT_HEIGHT));
+      
       setBallPosition({ x: clampedX, y: clampedY });
 
       // Only do shot detection and rotation in auto mode
@@ -296,11 +296,25 @@ export default function App() {
         lastBallX.current = clampedX;
       }
     } else if (isManualMode && (dragTarget === 'lead' || dragTarget === 'trail' || dragTarget === 'center')) {
-      // Handle referee dragging in manual mode
-      console.log('🎯 UPDATING REFEREE POSITION:', dragTarget, 'to', clampedX, clampedY);
+      // For referee dragging, use mouse coordinates relative to the court container
+      const courtWrapper = e.currentTarget;
+      const courtRect = courtWrapper.getBoundingClientRect();
+      const courtElement = courtWrapper.querySelector('.court');
+      const courtElementRect = courtElement ? courtElement.getBoundingClientRect() : courtRect;
       
+      // Calculate position relative to the court element itself
+      const mouseX = e.clientX - courtElementRect.left;
+      const mouseY = e.clientY - courtElementRect.top;
+      
+      // Clamp to court boundaries
+      const clampedX = Math.max(REF_SIZE / 2, Math.min(mouseX, COURT_WIDTH - REF_SIZE / 2));
+      const clampedY = Math.max(REF_SIZE / 2, Math.min(mouseY, COURT_HEIGHT - REF_SIZE / 2));
+      
+      // Position referee center at mouse position
       const refereeX = clampedX - REF_SIZE / 2;
       const refereeY = clampedY - REF_SIZE / 2;
+      
+      console.log('🎯 REFEREE DRAG:', dragTarget, 'mouse:', mouseX, mouseY, 'clamped:', clampedX, clampedY, 'referee:', refereeX, refereeY);
       
       if (dragTarget === 'lead') {
         console.log('🎯 SETTING LEAD POSITION:', { x: refereeX, y: refereeY });
