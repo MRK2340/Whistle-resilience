@@ -91,24 +91,35 @@ export default function App() {
   }, [ballPosition, isShotMode, gameState.lastRotationTime]);
 
   // Enhanced referee positioning using authentic basketball mechanics
-  const getLeadPosition = useCallback(() => {
-    if (isManualMode) return manualLeadPosition;
+  const getAutoLeadPosition = useCallback(() => {
     const optimalPos = getOptimalPosition('LEAD', ballPosition.x, ballPosition.y, gameState);
     return { x: optimalPos.x - REF_SIZE / 2, y: optimalPos.y - REF_SIZE / 2 };
-  }, [ballPosition, gameState, isManualMode, manualLeadPosition]);
+  }, [ballPosition, gameState]);
 
-  const getTrailPosition = useCallback(() => {
-    if (isManualMode) return manualTrailPosition;
+  const getAutoTrailPosition = useCallback(() => {
     const optimalPos = getOptimalPosition('TRAIL', ballPosition.x, ballPosition.y, gameState);
     return { x: optimalPos.x - REF_SIZE / 2, y: optimalPos.y - REF_SIZE / 2 };
-  }, [ballPosition, gameState, isManualMode, manualTrailPosition]);
+  }, [ballPosition, gameState]);
+
+  const getAutoCenterPosition = useCallback(() => {
+    if (!isThreePerson) return { x: 0, y: 0, opacity: 0 };
+    const optimalPos = getOptimalPosition('CENTER', ballPosition.x, ballPosition.y, gameState);
+    return { x: optimalPos.x - REF_SIZE / 2, y: optimalPos.y - REF_SIZE / 2, opacity: 1 };
+  }, [ballPosition, gameState, isThreePerson]);
+
+  // Current position getters that respect manual mode
+  const getLeadPosition = useCallback(() => {
+    return isManualMode ? manualLeadPosition : getAutoLeadPosition();
+  }, [isManualMode, manualLeadPosition, getAutoLeadPosition]);
+
+  const getTrailPosition = useCallback(() => {
+    return isManualMode ? manualTrailPosition : getAutoTrailPosition();
+  }, [isManualMode, manualTrailPosition, getAutoTrailPosition]);
 
   const getCenterPosition = useCallback(() => {
     if (!isThreePerson) return { x: 0, y: 0, opacity: 0 };
-    if (isManualMode) return { ...manualCenterPosition, opacity: 1 };
-    const optimalPos = getOptimalPosition('CENTER', ballPosition.x, ballPosition.y, gameState);
-    return { x: optimalPos.x - REF_SIZE / 2, y: optimalPos.y - REF_SIZE / 2, opacity: 1 };
-  }, [ballPosition, gameState, isThreePerson, isManualMode, manualCenterPosition]);
+    return isManualMode ? { ...manualCenterPosition, opacity: 1 } : getAutoCenterPosition();
+  }, [isManualMode, manualCenterPosition, getAutoCenterPosition, isThreePerson]);
 
   const [leadStyle, setLeadStyle] = useSpring(() => {
     const pos = getLeadPosition();
