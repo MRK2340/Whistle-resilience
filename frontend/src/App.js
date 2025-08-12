@@ -236,6 +236,9 @@ export default function App() {
   const handleMouseMove = useCallback((e) => {
     if (!isDragging || !dragTarget) return;
     
+    console.log('🎯 MOUSE MOVE:', dragTarget, 'isManualMode:', isManualMode);
+    
+    // Get coordinates relative to the court wrapper
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left - COURT_ORIGIN_X;
     const y = e.clientY - rect.top - COURT_ORIGIN_Y;
@@ -292,20 +295,25 @@ export default function App() {
         
         lastBallX.current = clampedX;
       }
-    } else if (isManualMode) {
+    } else if (isManualMode && (dragTarget === 'lead' || dragTarget === 'trail' || dragTarget === 'center')) {
       // Handle referee dragging in manual mode
+      console.log('🎯 UPDATING REFEREE POSITION:', dragTarget, 'to', clampedX, clampedY);
+      
       const refereeX = clampedX - REF_SIZE / 2;
       const refereeY = clampedY - REF_SIZE / 2;
       
       if (dragTarget === 'lead') {
+        console.log('🎯 SETTING LEAD POSITION:', { x: refereeX, y: refereeY });
         setManualLeadPosition({ x: refereeX, y: refereeY });
       } else if (dragTarget === 'trail') {
+        console.log('🎯 SETTING TRAIL POSITION:', { x: refereeX, y: refereeY });
         setManualTrailPosition({ x: refereeX, y: refereeY });
       } else if (dragTarget === 'center') {
+        console.log('🎯 SETTING CENTER POSITION:', { x: refereeX, y: refereeY });
         setManualCenterPosition({ x: refereeX, y: refereeY });
       }
     }
-  }, [isDragging, dragTarget, isShotMode, isManualMode, gameState.lastRotationTime]); // Removed stale dependencies
+  }, [isDragging, dragTarget, isShotMode, isManualMode, gameState.lastRotationTime]);
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
