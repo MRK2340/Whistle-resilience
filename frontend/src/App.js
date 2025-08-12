@@ -210,8 +210,16 @@ export default function App() {
 
   // Handle mouse down for both ball and referee dragging
   const handleMouseDown = useCallback((e, target = 'ball') => {
+    console.log('🎯 MOUSE DOWN:', target, 'isManualMode:', isManualMode);
     setIsDragging(true);
     setDragTarget(target);
+    
+    if (target !== 'ball') {
+      // For referee dragging, we need to handle coordinates differently
+      e.stopPropagation();
+      console.log('🎯 REFEREE DRAG START:', target);
+      return;
+    }
     
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left - COURT_ORIGIN_X;
@@ -223,8 +231,7 @@ export default function App() {
     if (target === 'ball') {
       setBallPosition({ x: clampedX, y: clampedY });
     }
-    // For referee pieces, initial position update happens in handleMouseMove
-  }, []);
+  }, [isManualMode]);
 
   const handleMouseMove = useCallback((e) => {
     if (!isDragging || !dragTarget) return;
