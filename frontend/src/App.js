@@ -297,6 +297,18 @@ export default function App() {
 
       <ToggleSystem isThreePerson={isThreePerson} onToggle={setIsThreePerson} />
       <ModeToggle isManualMode={isManualMode} onToggle={setIsManualMode} />
+      
+      {/* Coverage Zones Toggle */}
+      <div className="coverage-toggle-container">
+        <label className="coverage-toggle">
+          <input
+            type="checkbox"
+            checked={showCoverage}
+            onChange={(e) => setShowCoverage(e.target.checked)}
+          />
+          <span className="coverage-toggle-text">📐 Show Coverage Zones</span>
+        </label>
+      </div>
 
       <div 
         className="court-wrapper"
@@ -306,6 +318,15 @@ export default function App() {
         onMouseLeave={handleMouseUp}
       >
         <Court>
+          {/* Coverage Zones Overlay */}
+          <CoverageZones 
+            showCoverage={showCoverage}
+            ballPosition={ballPosition}
+            leadPosition={getLeadPosition()}
+            trailPosition={getTrailPosition()}
+            centerPosition={getCenterPosition()}
+            isThreePerson={isThreePerson}
+          />
           {/* Ball */}
           <animated.div 
             className="ball" 
