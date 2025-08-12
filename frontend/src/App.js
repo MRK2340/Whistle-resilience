@@ -312,6 +312,12 @@ export default function App() {
     });
   }, [ballPosition, setBallStyle]);
 
+  console.log('🐛 DEBUG: isManualMode =', isManualMode, 'manualPositions =', {
+    lead: manualLeadPosition,
+    trail: manualTrailPosition, 
+    center: manualCenterPosition
+  });
+
   return (
     <div className="app-container">
       <h1 className="app-title">🏀 RefereeCourt Pro</h1>
