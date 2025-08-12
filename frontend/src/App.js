@@ -6,6 +6,7 @@ import './App.css';
 import Court from './components/Court';
 import ToggleSystem from './components/ToggleSystem';
 import ModeToggle from './components/ModeToggle';
+import CoverageZones from './components/CoverageZones';
 import ShotOverlay from './components/ShotOverlay';
 
 // Utils & Constants
@@ -18,7 +19,10 @@ import {
   HALF_COURT_X, 
   BASKET_X, 
   BASKET_Y, 
-  SHOT_DISTANCE_THRESHOLD 
+  SHOT_DISTANCE_THRESHOLD,
+  getOptimalPosition,
+  isInZone,
+  getBallSide
 } from './utils/courtUtils';
 
 // Config
