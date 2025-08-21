@@ -221,6 +221,15 @@ export default function App() {
       return;
     }
     
+    // For ball dragging, calculate coordinates differently based on what was clicked
+    if (target === 'ball' && isManualMode) {
+      // If ball was clicked directly in manual mode, don't move it immediately
+      // Just start dragging from current position
+      console.log('🎯 BALL DRAG START in manual mode');
+      return;
+    }
+    
+    // For court clicks (not manual ball clicks), calculate position
     const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left - COURT_ORIGIN_X;
     const y = e.clientY - rect.top - COURT_ORIGIN_Y;
