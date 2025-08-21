@@ -248,13 +248,21 @@ export default function App() {
     console.log('🎯 MOUSE MOVE:', dragTarget, 'isManualMode:', isManualMode);
     
     if (dragTarget === 'ball') {
-      // For ball dragging, use court-relative coordinates
-      const rect = e.currentTarget.getBoundingClientRect();
-      const x = e.clientX - rect.left - COURT_ORIGIN_X;
-      const y = e.clientY - rect.top - COURT_ORIGIN_Y;
+      // For ball dragging, get coordinates relative to the court wrapper
+      const courtWrapper = e.currentTarget;
+      const courtRect = courtWrapper.getBoundingClientRect();
+      const courtElement = courtWrapper.querySelector('.court');
+      const courtElementRect = courtElement ? courtElement.getBoundingClientRect() : courtRect;
       
-      const clampedX = Math.max(0, Math.min(x, COURT_WIDTH));
-      const clampedY = Math.max(0, Math.min(y, COURT_HEIGHT));
+      // Calculate position relative to court element
+      const mouseX = e.clientX - courtElementRect.left;
+      const mouseY = e.clientY - courtElementRect.top;
+      
+      // Clamp to court boundaries (accounting for ball size)
+      const clampedX = Math.max(BALL_SIZE / 2, Math.min(mouseX, COURT_WIDTH - BALL_SIZE / 2));
+      const clampedY = Math.max(BALL_SIZE / 2, Math.min(mouseY, COURT_HEIGHT - BALL_SIZE / 2));
+      
+      console.log('🎯 BALL DRAG:', 'mouse:', mouseX, mouseY, 'clamped:', clampedX, clampedY);
       
       setBallPosition({ x: clampedX, y: clampedY });
 
