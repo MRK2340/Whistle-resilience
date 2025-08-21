@@ -400,6 +400,7 @@ export default function App() {
               position: 'absolute',
               cursor: isDragging && dragTarget === 'ball' ? 'grabbing' : 'grab'
             }}
+            onMouseDown={isManualMode ? (e) => { e.stopPropagation(); handleMouseDown(e, 'ball'); } : undefined}
           >
             <span className="ball-text">🏀</span>
           </animated.div>
