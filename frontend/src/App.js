@@ -409,7 +409,7 @@ export default function App() {
           />
           {/* Ball */}
           <animated.div 
-            className="ball" 
+            className={`ball ${isManualMode ? 'manual-mode' : ''}`}
             style={{
               ...ballStyle,
               width: BALL_SIZE,
